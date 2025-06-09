@@ -1,0 +1,191 @@
+/* Ogólne ustawienia */
+body {
+  margin: 0;
+  font-family: 'Patrick Hand', cursive;
+  background-color: #fff9fc;
+}
+
+/* Top section: profil i edycja */
+.top-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  width: 100%;
+  max-width: 80%;
+  margin: 0 auto;
+  justify-content: flex-start;
+}
+
+/* Profil po lewej */
+.profile-section {
+  flex: 0 1 300px;
+  min-width: 280px;
+  max-width: 320px;
+}
+
+.profile-section h2 {
+  color: #8b5e83;
+  margin-bottom: 1rem;
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #d2a8c7;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Edycja profilu po prawej */
+.edit-profile-section {
+  flex: 1 1 auto;
+  min-width: 280px;
+  max-width: 700px;
+  background-color: #f7eef8;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: inset 0 0 5px #d2a8c7;
+}
+
+.edit-profile-section h3 {
+  color: #8b5e83;
+  margin-bottom: 1rem;
+}
+
+.edit-profile-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.form-control,
+.form-control-file {
+  border: 2px solid #d2a8c7;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  font-size: 1rem;
+  color: #5c3a5f;
+  background-color: #fff9fc;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  border-color: #a87db2;
+  outline: none;
+  background-color: #fff;
+}
+
+/* Przycisk zapisu */
+.btn-save {
+  background-color: #a87db2;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: #fff;
+  border-radius: 6px;
+  margin-top: 1rem;
+  display: inline-block;
+}
+
+.btn-save:hover {
+  background-color: #8b5e83;
+}
+
+/* Linie poziome */
+hr {
+  border: none;
+  height: 1px;
+  background-color: #d8bfd8;
+  margin: 2rem 0;
+}
+
+/* Sekcja artykułów */
+.posts-section {
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.posts-section h3 {
+  color: #8b5e83;
+  margin-bottom: 1rem;
+}
+
+.posts-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.post-item {
+  margin-bottom: 1rem;
+  padding: 0.6rem 1rem;
+  background-color: #f7eef8;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(210, 168, 199, 0.5);
+}
+
+/* Link do edycji */
+.edit-link {
+  background-color: limegreen;
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.edit-link:hover {
+  background-color: darkgreen;
+  transform: scale(1.05);
+}
+
+/* Formularz usuwania */
+.delete-form {
+  display: inline;
+}
+
+.delete-btn {
+  font-size: 16px;
+  color: white;
+  background-color: #dc3545;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
+/* RESPONSYWNOŚĆ */
+@media (max-width: 900px) {
+  .top-section {
+    flex-direction: column;
+    max-width: 95%;
+  }
+
+  .profile-section,
+  .edit-profile-section {
+    flex: 1 1 100%;
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .profile-image {
+    width: 120px;
+    height: 120px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

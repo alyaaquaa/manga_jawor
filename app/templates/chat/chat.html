@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+<main id="chat-container">
+<div class="chat-container">
+  <h2>Czat</h2>
+
+  <form method="get" class="search-form">
+    <input type="text" name="q" placeholder="Szukaj użytkownika..." style="font-family: 'Patrick Hand', cursive;" value="{{ request.args.q or '' }}">
+    <button type="submit" class="btn search-btn">Wyszukaj</button>
+  </form>
+
+  {% if search_error %}
+    <div class="search-error" style="color: #e74c3c; margin: 10px 0;">
+      {{ search_error }}
+    </div>
+  {% endif %}
+
+  {% if users %}
+    <div class="search-results">
+      <h4>Wyniki wyszukiwania:</h4>
+      <ul>
+        {% for user in users %}
+          <li>
+            <img src="{% if user.profile_image %}{{ url_for('static', filename='profile_pics/' + user.profile_image) }}{% else %}{{ url_for('static', filename='img/default_avatar.png') }}{% endif %}"
+                 alt="avatar" class="avatar">
+            {{ user.username }}
+            {% if existing_chats.get(user.id) %}
+              <a href="{{ url_for('chat.view_chat', chat_id=existing_chats[user.id].id) }}">Przejdź do istniejącego czatu</a>
+            {% else %}
+              <a href="{{ url_for('chat.start_chat', user_id=user.id) }}">Rozpocznij czat</a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <hr>
+
+  <div class="user-chats">
+    <h4>Twoje czaty:</h4>
+    <ul>
+      {% for chat in chats %}
+        <li>
+          <a href="{{ url_for('chat.view_chat', chat_id=chat.id) }}">
+            {% for participant in chat.participants if participant != current_user %}
+              <img src="{% if participant.profile_image %}{{ url_for('static', filename='profile_pics/' + participant.profile_image) }}{% else %}{{ url_for('static', filename='img/default_avatar.png') }}{% endif %}"
+                   alt="avatar" class="avatar">
+              {{ participant.username }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </a>
+
+          <!-- Zarządzanie czatem -->
+<div style="display: flex; gap: 5px; justify-content: flex-end; flex-wrap: wrap; margin-top: 5px;">
+        <form method="post" action="{{ url_for('chat.delete_chat', chat_id=chat.id) }}">
+          <button type="submit" class="btn btn-sm btn-danger"
+                  onclick="return confirm('Czy na pewno chcesz usunąć ten czat?')">Usuń</button>
+        </form>
+
+        {% for participant in chat.participants if participant != current_user %}
+          {% if participant in current_user.blocked_users %}
+            <form method="post" action="{{ url_for('chat.unblock_user', user_id=participant.id) }}">
+              <button type="submit" class="btn btn-sm btn-secondary" style="background-color: orangered">Odblokuj</button>
+            </form>
+          {% else %}
+            <form method="post" action="{{ url_for('chat.block_user', user_id=participant.id) }}">
+              <button type="submit" class="btn btn-sm btn-warning"
+                      onclick="return confirm('Zablokować użytkownika {{ participant.username }}?')">Zablokuj</button>
+            </form>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </li>
+  {% else %}
+    <li>Brak aktywnych czatów.</li>
+  {% endfor %}
+</ul>
+
+<!-- Zablokowani użytkownicy -->
+{% if current_user.blocked_users %}
+  <hr>
+  <h4>Zablokowani użytkownicy:</h4>
+  <ul>
+    {% for blocked in current_user.blocked_users %}
+      <li>
+        {{ blocked.username }}
+        <form method="post" action="{{ url_for('chat.unblock_user', user_id=blocked.id) }}" style="display:inline;">
+          <button type="submit" class="btn btn-sm btn-secondary">Odblokuj</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+    </main>
+{% endblock %}
+

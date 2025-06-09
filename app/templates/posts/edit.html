@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    form {
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #1e1e1e;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+        color: #f0f0f0;
+    }
+
+    form h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #fff;
+    }
+
+    form div {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #444;
+        border-radius: 8px;
+        background-color: white !important;
+        color: black !important;
+        resize: vertical;
+    }
+
+    textarea {
+        min-height: 120px;
+    }
+
+    input[type="file"] {
+        border: none;
+        background-color: transparent;
+        color: #ddd;
+    }
+
+
+.button-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.button-group button,
+.button-group a {
+    background-color: dodgerblue;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.button-group button:hover,
+.button-group a:hover {
+    background-color: #0062f8;
+    transform: scale(1.05);
+}
+
+
+    ::placeholder {
+        color: #aaa;
+    }
+
+    .genres-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .genres-container label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background-color: #2e2e2e;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        user-select: none;
+        font-weight: normal;
+    }
+
+    .genres-container input[type="checkbox"] {
+        accent-color: #ff4081;
+        cursor: pointer;
+    }
+
+
+    img {
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+</style>
+
+<h2 style="text-align: center;">Edytuj post</h2>
+
+<!-- komunikaty flash -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} mt-2">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <div>
+        {{ form.title.label }}
+        {{ form.title(class="form-control") }}
+    </div>
+
+    <div>
+        {{ form.content.label }}
+        {{ form.content(class="form-control") }}
+    </div>
+
+    <div>
+        {{ form.genres.label }}
+        <div class="genres-container">
+            {% for subfield in form.genres %}
+                <label>{{ subfield() }} {{ subfield.label.text }}</label>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div>
+        {{ form.tags.label }}
+        {{ form.tags(class="form-control", placeholder="np. romans, horror, akcja") }}
+    </div>
+
+    <div>
+        <label for="image">Zmień obrazek:</label>
+        <input type="file" name="image" id="image" accept="image/*">
+    </div>
+
+    {% if post.image_filename %}
+        <div>
+            <p>Aktualny obrazek:</p>
+            <img src="{{ url_for('static', filename='uploads/' ~ post.image_filename) }}" alt="Obrazek" style="max-width:300px;">
+        </div>
+    {% endif %}
+<div>
+    {{ form.image_url.label }}
+    {{ form.image_url(class="form-control", placeholder="https://example.com/obrazek.jpg") }}
+</div>
+
+
+<div class="button-group">
+    <button type="submit" style="font-family: 'Patrick Hand', cursive;background-color: green">Zaktualizuj post</button>
+
+    <a href="{{ url_for('posts.show', post_id=post.id) }}" style="font-family: 'Patrick Hand', cursive;">Wyświetl</a>
+
+</div>
+
+
+</form>
+{% endblock %}

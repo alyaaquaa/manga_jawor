@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <title>Logowanie</title>
+    <style>
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: start;
+            justify-content: center;
+            padding-top: 80px;
+            z-index: 1000;
+        }
+
+        .popup-box {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            animation: popupFade 0.3s ease-out;
+        }
+
+        @keyframes popupFade {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .popup-box h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .popup-box form p {
+            margin-bottom: 15px;
+        }
+
+        .popup-box .links {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .popup-box a {
+            display: inline-block;
+            margin: 5px;
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .popup-box a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="popup-overlay">
+        <div class="popup-box">
+            <h2>Logowanie</h2>
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <p>{{ form.email.label }}<br> {{ form.email(class="form-control") }}</p>
+                <p>{{ form.password.label }}<br> {{ form.password(class="form-control") }}</p>
+                <p>{{ form.submit(class="btn btn-primary") }}</p>
+            </form>
+            <div class="links">
+                <a href="{{ url_for('auth.register') }}">Nie masz konta? Zarejestruj się</a><br>
+                <a href="{{ url_for('main.index') }}" style="font-size: 14px">⬅ Powrót na stronę główną</a>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

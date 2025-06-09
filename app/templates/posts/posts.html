@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="search-row">
+  <form method="get" action="{{ url_for('posts.index') }}" class="search-form">
+    <input type="text" name="q" placeholder="Szukaj postów..." style="font-family: 'Patrick Hand', cursive;" value="{{ request.args.get('q', '') }}">
+    <button type="submit" style="font-family: 'Patrick Hand', cursive;">Szukaj</button>
+  </form>
+</div>
+
+
+<div class="posts-header">
+  <h1>Wszystkie posty</h1>
+
+  {% if current_user.is_authenticated  or current_user.is_admin %}
+    <a href="{{ url_for('posts.create') }}" class="new-post-button">+ Nowy post</a>
+  {% endif %}
+</div>
+
+  <!-- Formularz sortowania -->
+  <form method="get" action="{{ url_for('posts.index') }}" class="sort-form">
+    <label for="sort" style="font-family: 'Patrick Hand', cursive;">Sortuj według daty:</label>
+    <select name="sort" id="sort" onchange="this.form.submit()">
+      <option value="desc" style="font-family: 'Patrick Hand', cursive;" {% if sort_order =='desc' %}selected{% endif %}>Od najnowszego</option>
+      <option value="asc" style="font-family: 'Patrick Hand', cursive;" {% if sort_order =='asc' %}selected{% endif %}>Od najstarszego</option>
+    </select>
+      <label for="genre" style="font-family: 'Patrick Hand', cursive;">Filtruj według gatunku:</label>
+  <select name="genre" id="genre" onchange="this.form.submit()">
+    <option value="" style="font-family: 'Patrick Hand', cursive;">-- Wszystkie --</option>
+    {% for genre in all_genres %}
+      <option value="{{ genre }}" {% if selected_genre == genre %}selected{% endif %}>{{ genre }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="tag" style="font-family: 'Patrick Hand', cursive;">Filtruj według tagu:</label>
+  <select name="tag" id="tag" onchange="this.form.submit()">
+    <option value="" style="font-family: 'Patrick Hand', cursive;">-- Wszystkie --</option>
+    {% for tag in all_tags %}
+      <option value="{{ tag.name }}" {% if selected_tag == tag.name %}selected{% endif %}>{{ tag.name }}</option>
+    {% endfor %}
+  </select>
+  </form>
+
+  {% for post in posts.items %}
+    <article class="post">
+      <h3>{{ post.title }}</h3>
+      <!-- Układ z obrazkiem po lewej i treścią po prawej -->
+      <div class="post-content">
+        <div class="post-image">
+          {% if post.image_filename %}
+            <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}" alt="Post Image" class="post-thumbnail">
+          {% else %}
+            <img src="{{ url_for('static', filename='img/default_image.jpg') }}" alt="Default Image" class="post-thumbnail">
+          {% endif %}
+        </div>
+
+        <div class="post-text">
+          <p>{{ post.content|truncate(200, True, '') }}...<a href="{{ url_for('posts.show', post_id=post.id) }}" class="view-link">Wyświetl więcej</a>
+          </p>
+          <div class="author-info">
+            <small>Autor: {{ post.author.username }} • {{ post.created_at.strftime('%Y-%m-%d') }}</small>
+          </div>
+<p><strong>Gatunki:</strong>
+  {% if post.genres %}
+    {% for genre in post.genres.split(',') %}
+      <span class="genre-tag">{{ genre }}</span>
+    {% endfor %}
+  {% else %}
+    brak
+  {% endif %}
+</p>
+          <p><strong style="font-family: 'Patrick Hand', cursive;">Tagi:</strong>
+            {% if post.tags %}
+
+                {% for tag in post.tags %}
+                    <span class="tags">#{{ tag.name }}</span>
+                {% endfor %}
+
+            {% endif %}
+          </p>
+        </div>
+      </div>
+
+      <!-- Linki do edytowania i usuwania w prawym dolnym rogu -->
+      {% if current_user == post.author  or current_user.is_admin %}
+        <div class="post-actions">
+          <a href="{{ url_for('posts.edit', post_id=post.id) }}" class="edit-link" style="color: white;font-size: 16px; text-decoration: none; border: none;padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;">Edytuj</a>
+          <form action="{{ url_for('posts.delete', post_id=post.id) }}" method="post" style="display:inline;">
+            <button type="submit" class="delete-button" onclick="return confirm('Na pewno?')" style="font-family: 'Patrick Hand', cursive;">Usuń</button>
+          </form>
+        </div>
+      {% endif %}
+    </article>
+
+  {% endfor %}
+
+  <!-- Paginacja -->
+  <div class="pagination">
+    {% if posts.has_prev %}
+      <a href="{{ url_for('posts.index', page=posts.prev_num, sort=sort_order) }}">« Poprzednia</a>
+    {% endif %}
+    <span>Strona {{ posts.page }} z {{ posts.pages }}</span>
+    {% if posts.has_next %}
+      <a href="{{ url_for('posts.index', page=posts.next_num, sort=sort_order) }}">Następna »</a>
+    {% endif %}
+  </div>
+
+{% endblock %}
+

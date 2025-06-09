@@ -1,0 +1,144 @@
+.post-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
+}
+
+.author-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.author-avatar {
+    width:100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.author-name {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.meta-info p {
+    margin: 3px 0;
+    font-size: 0.95em;
+}
+
+.genre-tag, .tag-badge {
+    display: inline-block;
+    background-color: #eee;
+    padding: 2px 8px;
+    margin: 2px 4px 2px 0;
+    border-radius: 8px;
+    font-size: 0.85em;
+}
+
+.tag-badge {
+    background-color: #cce4ff;
+}
+/* Kontener na zdjęcie i treść obok siebie */
+.post-wrapper {
+    display: flex;
+    align-items: flex-start; /* WAŻNE: zapobiega rozciąganiu elementów */
+    gap: 20px; /* odstęp między obrazkiem a tekstem */
+}
+.post-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 40%;
+}
+.meta-info p {
+margin-top: 25px;
+
+}
+/* Styl dla plakietek tagów i gatunków */
+.genres {
+    display: inline-block;
+    background-color: peachpuff;
+    color: black;
+    padding: 6px 12px;
+    margin: 4px 6px 4px 0;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    max-width: 100%;
+
+}
+.tag-badge {
+    display: inline-block;
+    background-color: dodgerblue;
+    color: white;
+    padding: 6px 12px;
+    margin: 4px 6px 4px 0;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+/* Dodaj odstępy nad tytułami sekcji */
+.genres-line,
+.tags-line,
+.date-line,
+.author-line{
+    margin-top: 20px;
+    display: block;
+    font-weight: bold;
+}
+
+/* Ramka ze zdjęciem */
+.post-image-box {
+    display: inline-block;
+    border: 3px solid #151212;
+    border-radius: 12px;
+    padding: 0;
+    line-height: 0; /* usuwa marginesy wokół obrazka */
+}
+.post-image-box img {
+    display: block;
+    width: 100%;
+    max-width: 600px; /* konkretna maksymalna szerokość */
+    height: auto;
+    border-radius: 10px;
+    margin: 0 auto; /* centrowanie */
+}
+
+/* Ramka z tekstem */
+.post-text-box {
+
+    border:3px solid #151212;
+    border-radius: 12px;
+    padding: 20px;
+    width: 58%;
+    min-width: 250px;
+
+}
+
+.post-text-box h2 {
+    font-size: 1.6em;
+    margin-bottom: 15px;
+}
+
+.post-text-box p {
+    font-size: 1.1em;
+    line-height: 1.7;
+}
+.post-image-box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+@media (max-width: 768px) {
+    .post-wrapper {
+        flex-direction: column;
+    }
+
+    .post-image-box {
+        margin-top: 1rem;
+    }
+}

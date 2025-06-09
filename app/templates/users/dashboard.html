@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+
+    <!-- Górna część: profil i edycja obok siebie -->
+    <section class="top-section">
+      <div class="profile-section">
+        <h2>Twój profil</h2>
+        {% if user.profile_image %}
+          <img src="{{ url_for('static', filename='profile_pics/' ~ user.profile_image) }}"
+               alt="Zdjęcie profilowe"
+               class="profile-image">
+        {% endif %}
+        <p><strong>Nazwa użytkownika:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+      </div>
+
+      <div class="edit-profile-section">
+        <h3>Edytuj profil</h3>
+        <form method="POST" enctype="multipart/form-data" class="edit-profile-form">
+          {{ form.hidden_tag() }}
+
+          <div class="form-group">
+            {{ form.username.label }}
+            {{ form.username(class="form-control", size=32) }}
+          </div>
+
+          <div class="form-group">
+            {{ form.email.label }}
+            {{ form.email(class="form-control", size=32) }}
+          </div>
+
+          <div class="form-group">
+            {{ form.profile_image.label }}
+            {{ form.profile_image(class="form-control-file") }}
+          </div>
+
+          <button type="submit" class="btn-save">Zapisz zmiany</button>
+        </form>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- Sekcja z artykułami na całą szerokość -->
+    <section class="posts-section">
+      <h3>Twoje artykuły</h3>
+      {% if posts %}
+        <ul class="posts-list">
+          {% for post in posts %}
+            <li class="post-item">
+              <strong>{{ post.title }}</strong>
+              <p>{{ post.content }}</p>
+              <a href="{{ url_for('posts.edit', post_id=post.id) }}" class="edit-link">Edytuj</a>
+              <form action="{{ url_for('posts.delete', post_id=post.id) }}" method="POST" class="delete-form">
+                <button type="submit" class="delete-btn" onclick="return confirm('Na pewno usunąć?')">Usuń</button>
+              </form>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Nie masz jeszcze żadnych postów.</p>
+      {% endif %}
+    </section>
+
+  </div>
+{% endblock %}

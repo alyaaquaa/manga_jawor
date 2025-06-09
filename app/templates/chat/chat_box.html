@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous"></script>
+    <style>
+  .btn, .btn-dark, .btn-outline-secondary {
+    font-family: 'Patrick Hand', cursive; !important;
+  }
+</style>
+<div class="container-box">
+    <a href="{{ url_for('chat.index') }}" class="custom-back-btn">&larr; Wróć do czatów</a>
+<h4>Czat z {{ user.username }}</h4>
+  <div id="chat-box" class="chat-box">
+    {% for msg in messages %}
+      <div class="message {% if msg.sender.id == current_user.id %}own{% endif %}">
+        <img src="{% if msg.sender.profile_image %}{{ url_for('static', filename='profile_pics/' + msg.sender.profile_image) }}{% else %}{{ url_for('static', filename='img/default_avatar.png') }}{% endif %}" alt="avatar" class="avatar">
+        <div class="content">
+          <strong>{% if msg.sender.id == current_user.id %}Ty{% else %}{{ msg.sender.username }}{% endif %}</strong>: {{ msg.content }}
+          <small>{{ msg.timestamp.strftime('%H:%M') }}</small>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+{% if is_blocked %}
+  <div class="alert alert-danger">
+    Nie możesz pisać w tej rozmowie. Jeden z użytkowników jest zablokowany.
+  </div>
+{% else %}
+  <form id="chat-form" method="post" aria-label="Formularz wiadomości">
+    <div class="form-group mb-2">
+      <textarea id="message-input" name="message" class="form-control"
+                placeholder="Wpisz wiadomość..." rows="1"
+                aria-label="Wiadomość"
+                style="resize: none; overflow-y: auto; max-height: 150px;background-color: white;color: black;"></textarea>
+    </div>
+    <button type="submit" class="btn btn-dark" style="font-family: 'Patrick Hand', cursive !important;
+               background-color: dodgerblue !important;
+               width: fit-content !important;
+               max-width: 100% !important;
+               white-space: nowrap;">Wyślij</button>
+  </form>
+{% endif %}
+
+</div>
+
+
+<script>
+const socket = io();
+const chatId = "{{ chat.id }}";
+const currentUserId = "{{ current_user.id }}";
+const chatBox = document.getElementById('chat-box');
+
+socket.emit("join", { chat_id: chatId });
+
+document.getElementById("chat-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const input = document.getElementById("message-input");
+  const message = input.value.trim();
+  if (message !== '') {
+    socket.emit("send_message", { chat_id: chatId, message: message });
+    input.value = '';
+    input.style.height = 'auto';
+  }
+});
+
+socket.on("receive_message", function(data) {
+  const msgEl = document.createElement("div");
+  msgEl.className = "message" + (data.is_current_user ? " own" : "");
+  msgEl.innerHTML = `
+    <img src="${data.profile_image}" alt="avatar" class="avatar">
+    <div class="content">
+      <strong>${data.is_current_user ? "Ty" : data.username}</strong>: ${data.message}
+      <small>${data.timestamp}</small>
+    </div>
+  `;
+  chatBox.appendChild(msgEl);
+  chatBox.scrollTop = chatBox.scrollHeight;
+});
+
+</script>
+<script>
+  window.onload = function () {
+    chatBox.scrollTop = chatBox.scrollHeight;
+  };
+</script>
+
+
+{% endblock %}
+

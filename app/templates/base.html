@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MangaWave{% endblock %}</title>
+
+    <!-- Style główne -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/comment.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/show.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+
+    <!-- Czcionka -->
+    <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&display=swap" rel="stylesheet">
+
+    <!-- Styl czatu tylko gdy chat_page -->
+    {% if chat_page %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+    {% endif %}
+
+    <!-- Flash messages -->
+    <style>
+        .flash-message {
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            min-width: 250px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .flash-close {
+            float: right;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+    </style>
+
+    {% block head %}{% endblock %}
+</head>
+<body class="{% if chat_page %}no-scroll{% endif %}">
+<div class="container">
+    <aside id="sidebar" class="sidebar open">
+        <div class="sidebar-header" style="border-top: 1px solid black;">
+            <h1 id="sidebar-title">
+                <a href="{{ url_for('main.index') }}" class="logo-link">MangaWave</a>
+            </h1>
+            <button class="toggle-btn" onclick="toggleSidebar(); rotateToggleIcon()">☰</button>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('main.index') }}"><span class="icon"><img src="{{ url_for('static', filename='img/dom.png') }}" alt="Dom" style="width: 30px; height: 30px;"></span><span class="text">Strona główna</span></a></li>
+                <li><a href="{{ url_for('posts.index') }}"><span class="icon"><img src="{{ url_for('static', filename='img/post.png') }}" alt="Posty" style="width: 30px; height: 30px;"></span><span class="text">Artykuły</span></a></li>
+                <li><a href="{{ url_for('chat.index') }}"><span class="icon"><img src="{{ url_for('static', filename='img/chat.png') }}" alt="Czat" style="width: 30px; height: 30px;"></span><span class="text">Czat</span></a></li>
+                <li><a href="#"><span class="icon"><img src="{{ url_for('static', filename='img/mail.png') }}" alt="Kontakt" style="width: 30px; height: 30px;"></span><span class="text">Kontakt</span></a></li>
+                {% if current_user.is_authenticated and current_user.is_admin %}
+                    <li><a href="{{ url_for('admin_bp.chat_list') }}"><span class="short-text">ZC</span><span class="text">Zarządzaj czatami</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.user_list') }}"><span class="short-text">ZU</span><span class="text">Zarządzaj użytkownikami</span></a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        <div class="sidebar-back-link">
+            <a href="javascript:history.back()" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <span class="icon">
+                    <img src="{{ url_for('static', filename='img/back.png') }}" alt="Wróć" style="width: 30px; height: 30px;">
+                </span>
+                <span class="text">Powrót</span>
+            </a>
+        </div>
+    </aside>
+
+    <div class="main-area">
+        <header class="navbar">
+            <div id="navbar-title" class="navbar-title hidden">
+                <a href="{{ url_for('main.index') }}" class="logo-link">MangaWave</a>
+            </div>
+            <div class="navbar-right">
+                {% if current_user.is_authenticated %}
+                    Zalogowano jako {{ current_user.username }}
+                    <a href="{{ url_for('users.dashboard') }}">Profil</a>
+                    <a href="{{ url_for('auth.logout') }}">Wyloguj</a>
+                {% else %}
+                    <a href="/auth/login">Zaloguj</a> |
+                    <a href="/auth/register">Zarejestruj</a>
+                {% endif %}
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        <span class="flash-close" onclick="this.parentElement.style.display='none';">&times;</span>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="main-content">
+            {% if not chat_page %}
+                <div class="banner-image"></div>
+            {% endif %}
+
+            <main>
+                {% block content %}{% endblock %}
+            </main>
+
+            <footer class="footer">
+                <div class="footer-content">
+                    <p>© 2025 MangaWave. Wszelkie prawa zastrzeżone.</p>
+                    <p><a href="/kontakt">Kontakt</a> | <a href="/polityka-prywatnosci">Polityka prywatności</a></p>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<!-- Skrypty -->
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const navbarTitle = document.getElementById('navbar-title');
+        const isOpen = sidebar.classList.toggle('open');
+        navbarTitle.classList.toggle('hidden', isOpen);
+    }
+
+    function rotateToggleIcon() {
+        const toggleBtn = document.querySelector('.toggle-btn');
+        toggleBtn.classList.toggle('rotated');
+    }
+
+    // Flash message znikanie po 5 sek
+    setTimeout(() => {
+        document.querySelectorAll('.flash-message').forEach(el => {
+            el.style.transition = 'opacity 0.5s ease';
+            el.style.opacity = '0';
+            setTimeout(() => el.remove(), 500);
+        });
+    }, 5000);
+
+    // Obsługa Zen Mode (jeśli przycisk istnieje)
+    const toggleBtn = document.getElementById('theme-toggle');
+    if (toggleBtn) {
+        const body = document.body;
+        toggleBtn.addEventListener('click', () => {
+            body.classList.toggle('zen-mode');
+            toggleBtn.textContent = body.classList.contains('zen-mode') ? '🌞 Dzień' : '🌓 Zen';
+        });
+    }
+</script>
+</body>
+</html>

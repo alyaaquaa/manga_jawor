@@ -1,0 +1,62 @@
+.comment {
+    background: linear-gradient(135deg, rgba(31, 255, 255, 0.15), rgb(255, 255, 255));
+    border: 2px dashed #0ea5e9;
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
+    max-width: 768px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.comment:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgb(21, 18, 18);
+}
+
+.comment strong {
+    color: #c084fc; /* pastelowy fiolet */
+    font-weight: 600;
+}
+
+form textarea {
+    background-color: #ffffff;
+    color: #000000;
+    border: 4px solid #151212;
+    border-radius: 1rem;
+    padding: 1rem;
+    width: 90%;
+    resize: vertical;
+    font-size: 0.95rem;
+    transition: border-color 0.3s ease;
+}
+
+form textarea:focus {
+    border-color: dodgerblue;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 101, 255, 0.3);
+}
+
+.btn {
+    background-color: dodgerblue;
+    color: black;
+    padding: 0.5rem 1.25rem;
+    border-radius: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    border: none;
+}
+
+.btn:hover {
+    background-color: peachpuff;
+    transform: scale(1.05);
+}
+
+h3 {
+
+    font-size: 1.8rem;
+    text-align: center;
+}
