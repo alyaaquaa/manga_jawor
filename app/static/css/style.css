@@ -127,7 +127,7 @@ body.zen-mode .banner-image::after {
     padding: 0 30px;
     box-sizing: border-box;
     flex-shrink: 0;
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Sawarabi Mincho', serif;
     border-bottom: 4px solid white;
     width: 100%;
     position: relative;
@@ -272,7 +272,7 @@ body.zen-mode .info-tiles {
     width: 200px;
     height: 70px;
     background-color: #fff;
-    font-family: 'Gloria Hallelujah', cursive;
+    font-family: 'Sawarabi Mincho', serif;
     font-size: 20px;
     text-align: center;
     color: #111;
@@ -540,7 +540,7 @@ html {
    display: flex;
    align-items: center;
    gap: 10px;
-   font-family: 'Patrick Hand', cursive;
+   font-family: 'Sawarabi Mincho', serif;
    color: black;
 }
 
@@ -555,7 +555,7 @@ html {
    border-radius: 6px;
    padding: 6px 10px;
    font-size: 15px;
-   font-family: 'Patrick Hand', cursive;
+   font-family: 'Sawarabi Mincho', serif;
    transition: all 0.3s ease;
 }
 
