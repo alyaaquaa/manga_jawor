@@ -5,7 +5,7 @@
   color: #f1f1f1;
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  font-family: 'Patrick Hand', cursive;
+  font-family: 'Sawarabi Mincho', serif;
 
   width: 100%;
   max-width: 80vw;  /* ograniczenie szerokości */
@@ -97,7 +97,7 @@
   height: 80vh; /* Stała wysokość kontenera */
 
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
-  font-family: 'Patrick Hand', cursive;
+  font-family: 'Sawarabi Mincho', serif;
   box-sizing: border-box;
 }
 
@@ -105,7 +105,7 @@
 
 
 .container-box h3 {
-  font-family: 'Patrick Hand', cursive;
+  font-family: 'Sawarabi Mincho', serif;
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
   color: #ffffff;
@@ -155,7 +155,7 @@ form {
   overflow-y: auto;
   min-height: 40px;
   max-height: 200px;
-  font-family: 'Patrick Hand', cursive;
+font-family: 'Sawarabi Mincho', serif;
   font-size: 14px;
   box-sizing: border-box;
 }
@@ -203,7 +203,7 @@ form {
   border: 4px solid #000;
   border-radius: 25px;
   color: #000;
-  font-family: 'Patrick Hand', cursive;
+  font-family: 'Sawarabi Mincho', serif;
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: pre-wrap;
@@ -375,7 +375,7 @@ html, body {
   width: 100%;
   box-sizing: border-box;
   font-size: 14px;
-  font-family: 'Patrick Hand', cursive;
+  font-family: 'Sawarabi Mincho', serif;
 }
 
 .custom-back-btn {
